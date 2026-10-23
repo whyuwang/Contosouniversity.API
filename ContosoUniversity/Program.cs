@@ -1,3 +1,4 @@
+using System.Text.Json.Serialization;
 using ContosoUniversity.Data;
 using Microsoft.EntityFrameworkCore;
 

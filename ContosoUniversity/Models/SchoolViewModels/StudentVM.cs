@@ -1,0 +1,10 @@
+using System;
+
+namespace ContosoUniversity.Models.SchoolViewModels;
+
+public class StudentVM
+{
+    public string LastName { get; set; }
+    public string FirstMidName { get; set; }
+    public DateTime EnrollmentDate { get; set; }
+}
