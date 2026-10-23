@@ -1,4 +1,5 @@
 using ContosoUniversity.Data;
+using ContosoUniversity.Extensions;
 using ContosoUniversity.Models;
 using ContosoUniversity.Models.SchoolViewModels;
 using Microsoft.AspNetCore.Http;
@@ -12,17 +13,46 @@ namespace ContosoUniversity.Controllers
     public class StudentsController : ControllerBase
     {
         private readonly SchoolContext _context;
+        private readonly IConfiguration _configuration;
 
-        public StudentsController(SchoolContext context)
+        public StudentsController(SchoolContext context, IConfiguration configuration)
         {
             _context = context;
+            _configuration = configuration;
         }
 
         [HttpGet]
-        public async Task<ActionResult<IEnumerable<Student>>> GetStudents()
+        public async Task<ActionResult<PagedResult<Student>>> GetStudents(
+            [FromQuery] string sortOrder,
+            [FromQuery] string searchString,
+            [FromQuery] int? pageIndex)
         {
-            var students = await _context.Students.ToListAsync();
-            return Ok(students);
+            var query = from s in _context.Students select s;
+            if (!string.IsNullOrEmpty(searchString))
+            {
+                query = query.Where(
+                    s => s.LastName.Contains(searchString)
+                    || s.FirstMidName.Contains(searchString));
+            }
+
+            switch (sortOrder)
+            {
+                case "name_desc":
+                    query = query.OrderByDescending(s => s.LastName);
+                    break;
+                case "Date":
+                    query = query.OrderBy(s => s.EnrollmentDate);
+                    break;
+                case "date_desc":
+                    query = query.OrderByDescending(s => s.EnrollmentDate);
+                    break;
+                default:
+                    query = query.OrderBy(s => s.LastName);
+                    break;
+            }
+            var pageSize = _configuration.GetValue("PageSize", 4);
+            var result = await query.AsNoTracking().PageAsync(pageIndex ?? 1, pageSize);
+            return Ok(result);
         }
 
         [HttpGet("{id:int}")]
@@ -41,13 +71,27 @@ namespace ContosoUniversity.Controllers
             return Ok(student);
         }
 
+        [HttpGet("enrollment-date-groups")]
+        public async Task<ActionResult<IEnumerable<EnrollmentDateGroup>>> GetEnrollmentDateGroups()
+        {
+            var data = from student in _context.Students
+                       group student by student.EnrollmentDate into dateGroup
+                       orderby dateGroup.Key
+                       select new EnrollmentDateGroup
+                       {
+                           EnrollmentDate = dateGroup.Key,
+                           StudentCount = dateGroup.Count()
+                       };
+            return Ok(await data.AsNoTracking().ToListAsync());
+        }
+
         [HttpPost]
         public async Task<ActionResult<Student>> CreateStudent([FromBody] StudentVM studentVM)
         {
             var entry = _context.Students.Add(new Student());
             entry.CurrentValues.SetValues(studentVM);
             await _context.SaveChangesAsync();
-            return CreatedAtAction(nameof(GetStudent), new { ID = entry.Entity.ID }, entry.Entity);
+            return CreatedAtAction(nameof(GetStudent), new { id = entry.Entity.ID }, entry.Entity);
         }
 
         [HttpPut("{id:int}")]
