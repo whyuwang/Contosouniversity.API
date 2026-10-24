@@ -14,4 +14,6 @@ public class InstructorViewModel
     public string FirstMidName { get; set; }
 
     public DateTime HireDate { get; set; }
+    public string OfficeLocation { get; set; }
+    public List<int> CourseIDs { get; set; }
 }
