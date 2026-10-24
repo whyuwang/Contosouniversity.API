@@ -1,6 +1,7 @@
 using System;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
+using System.Text.Json.Serialization;
 
 namespace ContosoUniversity.Models;
 
@@ -24,5 +25,7 @@ public class Department
     public int? InstructorID { get; set; }
 
     public Instructor Administrator { get; set; }
+
+    [JsonIgnore]
     public ICollection<Course> Courses { get; set; }
 }

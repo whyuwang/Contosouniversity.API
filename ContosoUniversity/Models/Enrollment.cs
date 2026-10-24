@@ -27,4 +27,9 @@ public class Enrollment
     {
         get => Course == null ? string.Empty : Course.Title;
     }
+
+    public string StudentFullName
+    {
+        get => Student == null ? string.Empty : Student.FullName;
+    }
 }

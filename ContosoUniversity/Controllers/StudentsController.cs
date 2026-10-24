@@ -60,7 +60,7 @@ namespace ContosoUniversity.Controllers
         {
             var student = await _context.Students
                 .Include(s => s.Enrollments)
-                .ThenInclude(e => e.Course)
+                    .ThenInclude(e => e.Course)
                 .AsNoTracking()
                 .FirstOrDefaultAsync(s => s.ID == id);
             if (student == null)
@@ -86,16 +86,16 @@ namespace ContosoUniversity.Controllers
         }
 
         [HttpPost]
-        public async Task<ActionResult<Student>> CreateStudent([FromBody] StudentVM studentVM)
+        public async Task<ActionResult<Student>> CreateStudent([FromBody] StudentViewModel studentViewModel)
         {
             var entry = _context.Students.Add(new Student());
-            entry.CurrentValues.SetValues(studentVM);
+            entry.CurrentValues.SetValues(studentViewModel);
             await _context.SaveChangesAsync();
             return CreatedAtAction(nameof(GetStudent), new { id = entry.Entity.ID }, entry.Entity);
         }
 
         [HttpPut("{id:int}")]
-        public async Task<IActionResult> UpdateStudent([FromRoute] int id, [FromBody] StudentVM studentVM)
+        public async Task<IActionResult> UpdateStudent([FromRoute] int id, [FromBody] StudentViewModel studentViewModel)
         {
             var student = await _context.Students.FindAsync(id);
             if (student == null)
@@ -103,7 +103,7 @@ namespace ContosoUniversity.Controllers
                 return NotFound();
             }
 
-            _context.Entry(student).CurrentValues.SetValues(studentVM);
+            _context.Entry(student).CurrentValues.SetValues(studentViewModel);
             await _context.SaveChangesAsync();
             return NoContent();
         }
