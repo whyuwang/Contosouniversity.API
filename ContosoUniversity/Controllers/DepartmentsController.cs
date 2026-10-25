@@ -54,7 +54,7 @@ namespace ContosoUniversity.Controllers
         public async Task<IActionResult> UpdateDepartment(
             [FromRoute] int id,
             [FromBody] DepartmentViewModel departmentViewModel,
-            [FromHeader][Required] Guid concurrencyToken)
+            [FromHeader(Name = "ConcurrencyToken")][Required] Guid concurrencyToken)
         {
             var department = await _context.Departments.FindAsync(id);
             if (department == null)
@@ -102,7 +102,8 @@ namespace ContosoUniversity.Controllers
         }
 
         [HttpDelete("{id:int}")]
-        public async Task<IActionResult> DeleteDepartment([FromRoute] int id)
+        public async Task<IActionResult> DeleteDepartment(
+            [FromRoute] int id, [FromHeader(Name = "ConcurrencyToken")][Required] Guid concurrencyToken)
         {
             var department = await _context.Departments.FindAsync(id);
             if (department == null)
@@ -110,9 +111,26 @@ namespace ContosoUniversity.Controllers
                 return NotFound();
             }
 
+            _context.Entry(department).Property(e => e.ConcurrencyToken).OriginalValue = concurrencyToken;
             _context.Departments.Remove(department);
-            await _context.SaveChangesAsync();
-            return NoContent();
+            try
+            {
+                await _context.SaveChangesAsync();
+                return NoContent();
+            }
+            catch (DbUpdateConcurrencyException)
+            {
+                return Problem(
+                    type: "https://www.rfc-editor.org/info/rfc9110/#name-409-conflict",
+                    title: "Conflict",
+                    statusCode: StatusCodes.Status409Conflict,
+                    detail: "The record you attempted to delete "
+                            + "was modified by another user after you selected delete. "
+                            + "The delete operation was canceled and the current values in the "
+                            + "database have been displayed. If you still want to delete this "
+                            + "record, click the Delete button again."
+                );
+            }
         }
 
         private async Task<Dictionary<string, string>> SetDbErrorMessage(Department dbValues, Department clientValues)
