@@ -26,5 +26,8 @@ public class SchoolContext : DbContext
         modelBuilder.Entity<Student>().ToTable(nameof(Student));
         modelBuilder.Entity<Enrollment>().ToTable("Enrollment");
         modelBuilder.Entity<Instructor>().ToTable(nameof(Instructor));
+        modelBuilder.Entity<Department>()
+            .Property(d => d.ConcurrencyToken)
+            .IsConcurrencyToken();
     }
 }

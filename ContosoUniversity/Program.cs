@@ -1,3 +1,4 @@
+using System.Globalization;
 using System.Text.Json.Serialization;
 using ContosoUniversity.Data;
 using Microsoft.EntityFrameworkCore;
@@ -12,6 +13,10 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<SchoolContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("SchoolContextSQLite")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+
+var culture = new CultureInfo(builder.Configuration.GetValue("Culture", "zh-CN"));
+CultureInfo.DefaultThreadCurrentCulture = culture;
+CultureInfo.DefaultThreadCurrentUICulture = culture;
 
 var app = builder.Build();
 
