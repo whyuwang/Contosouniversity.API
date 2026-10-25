@@ -93,31 +93,6 @@ namespace ContosoUniversity.Migrations
                     b.ToTable("Enrollment", (string)null);
                 });
 
-            modelBuilder.Entity("ContosoUniversity.Models.Instructor", b =>
-                {
-                    b.Property<int>("ID")
-                        .ValueGeneratedOnAdd()
-                        .HasColumnType("INTEGER");
-
-                    b.Property<string>("FirstMidName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT")
-                        .HasColumnName("FirstName");
-
-                    b.Property<DateTime>("HireDate")
-                        .HasColumnType("TEXT");
-
-                    b.Property<string>("LastName")
-                        .IsRequired()
-                        .HasMaxLength(50)
-                        .HasColumnType("TEXT");
-
-                    b.HasKey("ID");
-
-                    b.ToTable("Instructor", (string)null);
-                });
-
             modelBuilder.Entity("ContosoUniversity.Models.OfficeAssignment", b =>
                 {
                     b.Property<int>("InstructorID")
@@ -132,14 +107,11 @@ namespace ContosoUniversity.Migrations
                     b.ToTable("OfficeAssignments");
                 });
 
-            modelBuilder.Entity("ContosoUniversity.Models.Student", b =>
+            modelBuilder.Entity("ContosoUniversity.Models.Person", b =>
                 {
                     b.Property<int>("ID")
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
-
-                    b.Property<DateTime>("EnrollmentDate")
-                        .HasColumnType("TEXT");
 
                     b.Property<string>("FirstMidName")
                         .IsRequired()
@@ -154,7 +126,9 @@ namespace ContosoUniversity.Migrations
 
                     b.HasKey("ID");
 
-                    b.ToTable("Student", (string)null);
+                    b.ToTable("Person", (string)null);
+
+                    b.UseTptMappingStrategy();
                 });
 
             modelBuilder.Entity("CourseInstructor", b =>
@@ -170,6 +144,26 @@ namespace ContosoUniversity.Migrations
                     b.HasIndex("InstructorsID");
 
                     b.ToTable("CourseInstructor");
+                });
+
+            modelBuilder.Entity("ContosoUniversity.Models.Instructor", b =>
+                {
+                    b.HasBaseType("ContosoUniversity.Models.Person");
+
+                    b.Property<DateTime>("HireDate")
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("Instructor", (string)null);
+                });
+
+            modelBuilder.Entity("ContosoUniversity.Models.Student", b =>
+                {
+                    b.HasBaseType("ContosoUniversity.Models.Person");
+
+                    b.Property<DateTime>("EnrollmentDate")
+                        .HasColumnType("TEXT");
+
+                    b.ToTable("Student", (string)null);
                 });
 
             modelBuilder.Entity("ContosoUniversity.Models.Course", b =>
@@ -233,6 +227,24 @@ namespace ContosoUniversity.Migrations
                     b.HasOne("ContosoUniversity.Models.Instructor", null)
                         .WithMany()
                         .HasForeignKey("InstructorsID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ContosoUniversity.Models.Instructor", b =>
+                {
+                    b.HasOne("ContosoUniversity.Models.Person", null)
+                        .WithOne()
+                        .HasForeignKey("ContosoUniversity.Models.Instructor", "ID")
+                        .OnDelete(DeleteBehavior.Cascade)
+                        .IsRequired();
+                });
+
+            modelBuilder.Entity("ContosoUniversity.Models.Student", b =>
+                {
+                    b.HasOne("ContosoUniversity.Models.Person", null)
+                        .WithOne()
+                        .HasForeignKey("ContosoUniversity.Models.Student", "ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

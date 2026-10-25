@@ -17,6 +17,7 @@ public class SchoolContext : DbContext
     public DbSet<Department> Departments { get; set; }
     public DbSet<Instructor> Instructors { get; set; }
     public DbSet<OfficeAssignment> OfficeAssignments { get; set; }
+    public DbSet<Person> People { get; set; }
 
     protected override void OnModelCreating(ModelBuilder modelBuilder)
     {
@@ -29,5 +30,6 @@ public class SchoolContext : DbContext
         modelBuilder.Entity<Department>()
             .Property(d => d.ConcurrencyToken)
             .IsConcurrencyToken();
+        modelBuilder.Entity<Person>().ToTable("Person");
     }
 }
