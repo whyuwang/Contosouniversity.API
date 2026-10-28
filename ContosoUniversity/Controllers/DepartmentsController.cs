@@ -2,6 +2,7 @@ using System.ComponentModel.DataAnnotations;
 using ContosoUniversity.Data;
 using ContosoUniversity.Models;
 using ContosoUniversity.Models.SchoolViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -20,6 +21,7 @@ namespace ContosoUniversity.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Instructor")]
         public async Task<ActionResult<IEnumerable<Department>>> GetDepartments()
         {
             var departments = await _context.Departments.AsNoTracking().ToListAsync();

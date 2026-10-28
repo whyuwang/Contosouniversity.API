@@ -1,6 +1,7 @@
 using ContosoUniversity.Data;
 using ContosoUniversity.Models;
 using ContosoUniversity.Models.SchoolViewModels;
+using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.EntityFrameworkCore;
@@ -19,6 +20,7 @@ namespace ContosoUniversity.Controllers
         }
 
         [HttpGet]
+        [Authorize(Roles = "Student")]
         public async Task<ActionResult<IEnumerable<CourseViewModel>>> GetCourses()
         {
             var courses = await _context.Courses

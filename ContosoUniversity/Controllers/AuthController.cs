@@ -2,6 +2,7 @@ using System.IdentityModel.Tokens.Jwt;
 using System.Security.Claims;
 using System.Text;
 using ContosoUniversity.Data;
+using ContosoUniversity.Models;
 using ContosoUniversity.Models.SchoolViewModels;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -37,9 +38,16 @@ namespace ContosoUniversity.Controllers
 
             var key = new SymmetricSecurityKey(
                 Encoding.UTF8.GetBytes(_configuration["Jwt:Key"]));
+            string role = "Student";
+            if (person is Instructor)
+            {
+                role = "Instructor";
+            }
+
             var claims = new Claim[]
             {
-                new Claim(ClaimTypes.Name, person.FullName)
+                new Claim(ClaimTypes.Name, person.FullName),
+                new Claim(ClaimTypes.Role, role)
             };
             var token = new JwtSecurityToken(
                 issuer: _configuration["Jwt:Issuer"],
