@@ -10,6 +10,8 @@ This project provides a lightweight API for managing university data such as stu
 - Entity Framework Core with SQLite
 - Seeded sample data for the university database
 - CRUD-style controllers for core school entities
+- Search, sorting, and pagination for student records
+- JWT authentication and role-based authorization on selected endpoints
 - OpenAPI support in development
 
 ## Tech Stack
@@ -50,6 +52,7 @@ This project provides a lightweight API for managing university data such as stu
 
 - The database is configured in `appsettings.json` and uses SQLite.
 - Sample data is initialized automatically when the app starts.
+- Use `POST /api/auth/login` to obtain a JWT. Some endpoints require authentication or a specific role.
 
 ## License
 
