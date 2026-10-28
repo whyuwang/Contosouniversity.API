@@ -113,6 +113,11 @@ namespace ContosoUniversity.Migrations
                         .ValueGeneratedOnAdd()
                         .HasColumnType("INTEGER");
 
+                    b.Property<string>("Discriminator")
+                        .IsRequired()
+                        .HasMaxLength(13)
+                        .HasColumnType("TEXT");
+
                     b.Property<string>("FirstMidName")
                         .IsRequired()
                         .HasMaxLength(50)
@@ -124,11 +129,19 @@ namespace ContosoUniversity.Migrations
                         .HasMaxLength(50)
                         .HasColumnType("TEXT");
 
+                    b.Property<string>("Password")
+                        .HasColumnType("TEXT");
+
+                    b.Property<string>("Username")
+                        .HasColumnType("TEXT");
+
                     b.HasKey("ID");
 
                     b.ToTable("Person", (string)null);
 
-                    b.UseTptMappingStrategy();
+                    b.HasDiscriminator<string>("Discriminator").HasValue("Person");
+
+                    b.UseTphMappingStrategy();
                 });
 
             modelBuilder.Entity("CourseInstructor", b =>
@@ -153,7 +166,7 @@ namespace ContosoUniversity.Migrations
                     b.Property<DateTime>("HireDate")
                         .HasColumnType("TEXT");
 
-                    b.ToTable("Instructor", (string)null);
+                    b.HasDiscriminator().HasValue("Instructor");
                 });
 
             modelBuilder.Entity("ContosoUniversity.Models.Student", b =>
@@ -163,7 +176,7 @@ namespace ContosoUniversity.Migrations
                     b.Property<DateTime>("EnrollmentDate")
                         .HasColumnType("TEXT");
 
-                    b.ToTable("Student", (string)null);
+                    b.HasDiscriminator().HasValue("Student");
                 });
 
             modelBuilder.Entity("ContosoUniversity.Models.Course", b =>
@@ -227,24 +240,6 @@ namespace ContosoUniversity.Migrations
                     b.HasOne("ContosoUniversity.Models.Instructor", null)
                         .WithMany()
                         .HasForeignKey("InstructorsID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ContosoUniversity.Models.Instructor", b =>
-                {
-                    b.HasOne("ContosoUniversity.Models.Person", null)
-                        .WithOne()
-                        .HasForeignKey("ContosoUniversity.Models.Instructor", "ID")
-                        .OnDelete(DeleteBehavior.Cascade)
-                        .IsRequired();
-                });
-
-            modelBuilder.Entity("ContosoUniversity.Models.Student", b =>
-                {
-                    b.HasOne("ContosoUniversity.Models.Person", null)
-                        .WithOne()
-                        .HasForeignKey("ContosoUniversity.Models.Student", "ID")
                         .OnDelete(DeleteBehavior.Cascade)
                         .IsRequired();
                 });

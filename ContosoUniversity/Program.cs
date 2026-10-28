@@ -1,8 +1,11 @@
 using System.Globalization;
+using System.Text;
 using System.Text.Json.Serialization;
 using ContosoUniversity.Data;
 using ContosoUniversity.Middlewares;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.IdentityModel.Tokens;
 
 var builder = WebApplication.CreateBuilder(args);
 
@@ -14,6 +17,21 @@ builder.Services.AddOpenApi();
 builder.Services.AddDbContext<SchoolContext>(options =>
     options.UseSqlite(builder.Configuration.GetConnectionString("SchoolContextSQLite")));
 builder.Services.AddDatabaseDeveloperPageExceptionFilter();
+builder.Services.AddAuthentication(JwtBearerDefaults.AuthenticationScheme)
+    .AddJwtBearer(options =>
+    {
+        options.TokenValidationParameters = new TokenValidationParameters
+        {
+            ValidateAudience = true,
+            ValidateIssuer = true,
+            ValidateLifetime = true,
+            ValidateIssuerSigningKey = true,
+            ValidIssuer = builder.Configuration["Jwt:Issuer"],
+            ValidAudience = builder.Configuration["Jwt:Audience"],
+            IssuerSigningKey = new SymmetricSecurityKey(
+                Encoding.UTF8.GetBytes(builder.Configuration["Jwt:Key"]))
+        };
+    });
 
 var culture = new CultureInfo(builder.Configuration.GetValue("Culture", "zh-CN"));
 CultureInfo.DefaultThreadCurrentCulture = culture;
@@ -38,6 +56,7 @@ using (var scope = app.Services.CreateScope())
     DbInitializer.Initialize(context);
 }
 
+app.UseAuthentication();
 app.UseAuthorization();
 
 app.MapControllers();

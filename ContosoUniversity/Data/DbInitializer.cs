@@ -17,6 +17,8 @@ public static class DbInitializer
         {
             FirstMidName = "Carson",
             LastName = "Alexander",
+            Username = "alexander",
+            Password = "123456",
             EnrollmentDate = DateTime.Parse("2016-09-01")
         };
 
@@ -24,6 +26,8 @@ public static class DbInitializer
         {
             FirstMidName = "Meredith",
             LastName = "Alonso",
+            Username = "alonso",
+            Password = "123456",
             EnrollmentDate = DateTime.Parse("2018-09-01")
         };
 
@@ -31,6 +35,8 @@ public static class DbInitializer
         {
             FirstMidName = "Arturo",
             LastName = "Anand",
+            Username = "anand",
+            Password = "123456",
             EnrollmentDate = DateTime.Parse("2019-09-01")
         };
 
@@ -38,6 +44,8 @@ public static class DbInitializer
         {
             FirstMidName = "Gytis",
             LastName = "Barzdukas",
+            Username = "barzdukas",
+            Password = "123456",
             EnrollmentDate = DateTime.Parse("2018-09-01")
         };
 
@@ -45,6 +53,8 @@ public static class DbInitializer
         {
             FirstMidName = "Yan",
             LastName = "Li",
+            Username = "li",
+            Password = "123456",
             EnrollmentDate = DateTime.Parse("2018-09-01")
         };
 
@@ -52,6 +62,8 @@ public static class DbInitializer
         {
             FirstMidName = "Peggy",
             LastName = "Justice",
+            Username = "justice",
+            Password = "123456",
             EnrollmentDate = DateTime.Parse("2017-09-01")
         };
 
@@ -59,6 +71,8 @@ public static class DbInitializer
         {
             FirstMidName = "Laura",
             LastName = "Norman",
+            Username = "norman",
+            Password = "123456",
             EnrollmentDate = DateTime.Parse("2019-09-01")
         };
 
@@ -66,6 +80,8 @@ public static class DbInitializer
         {
             FirstMidName = "Nino",
             LastName = "Olivetto",
+            Username = "olivetto",
+            Password = "123456",
             EnrollmentDate = DateTime.Parse("2011-09-01")
         };
 
@@ -87,6 +103,8 @@ public static class DbInitializer
         {
             FirstMidName = "Kim",
             LastName = "Abercrombie",
+            Username = "abercrombie",
+            Password = "123456",
             HireDate = DateTime.Parse("1995-03-11")
         };
 
@@ -94,6 +112,8 @@ public static class DbInitializer
         {
             FirstMidName = "Fadi",
             LastName = "Fakhouri",
+            Username = "fakhouri",
+            Password = "123456",
             HireDate = DateTime.Parse("2002-07-06")
         };
 
@@ -101,6 +121,8 @@ public static class DbInitializer
         {
             FirstMidName = "Roger",
             LastName = "Harui",
+            Username = "harui",
+            Password = "123456",
             HireDate = DateTime.Parse("1998-07-01")
         };
 
@@ -108,6 +130,8 @@ public static class DbInitializer
         {
             FirstMidName = "Candace",
             LastName = "Kapoor",
+            Username = "kapoor",
+            Password = "123456",
             HireDate = DateTime.Parse("2001-01-15")
         };
 
@@ -115,6 +139,8 @@ public static class DbInitializer
         {
             FirstMidName = "Roger",
             LastName = "Zheng",
+            Username = "zheng",
+            Password = "123456",
             HireDate = DateTime.Parse("2004-02-12")
         };
 

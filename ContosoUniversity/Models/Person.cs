@@ -18,6 +18,9 @@ public abstract class Person
     [Display(Name = "First Name")]
     public string FirstMidName { get; set; }
 
+    public string Username { get; set; }
+    public string Password { get; set; }
+
     [Display(Name = "Full Name")]
     public string FullName
     {
