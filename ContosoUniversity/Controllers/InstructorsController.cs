@@ -69,18 +69,17 @@ namespace ContosoUniversity.Controllers
             {
                 entry.Entity.Courses = new List<Course>();
                 _context.Courses.Load();
-            }
-
-            foreach (var courseID in instructorViewModel.CourseIDs)
-            {
-                var course = await _context.Courses.FindAsync(courseID);
-                if (course != null)
+                foreach (var courseID in instructorViewModel.CourseIDs)
                 {
-                    entry.Entity.Courses.Add(course);
-                }
-                else
-                {
-                    _logger.LogWarning("Course {course} not found", course);
+                    var course = await _context.Courses.FindAsync(courseID);
+                    if (course != null)
+                    {
+                        entry.Entity.Courses.Add(course);
+                    }
+                    else
+                    {
+                        _logger.LogWarning("Course {course} not found", course);
+                    }
                 }
             }
 
@@ -112,7 +111,7 @@ namespace ContosoUniversity.Controllers
         {
             var instructor = await _context.Instructors
                 .Include(i => i.Courses)
-                .SingleAsync(i => i.ID == id);
+                .FirstOrDefaultAsync(i => i.ID == id);
             if (instructor == null)
             {
                 return NotFound();
